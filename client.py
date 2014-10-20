@@ -13,12 +13,9 @@ import sys
 try:
     SERVER = sys.argv[1]
     PORT = int(sys.argv[2])
-    MSG = sys.argv[3]
+    LINE = sys.argv[3]
 except IndexError:
     print ("Usage: python client.py ip port msg")
-
-# Contenido que vamos a enviar
-LINE = '¡Hola mundo!'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
