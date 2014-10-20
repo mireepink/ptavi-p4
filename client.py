@@ -11,19 +11,20 @@ import sys
 
 # Dirección IP del servidor.
 Entrada = sys.argv
-SERVER = Entrada[1]
+IP = Entrada[1]
 PORT = int(Entrada[2])
+PETICION = Entrada[3]
 
 # Contenido que vamos a enviar
-LINE = Entrada[3]
+DIRECCION = Entrada[4]
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-my_socket.connect((SERVER, PORT))
+my_socket.connect((IP, PORT))
 
-print "Enviando: " + LINE
-my_socket.send(LINE + '\r\n')
+print "Enviando: " + PETICION + " sip: " + DIRECCION
+my_socket.send(PETICION + " sip: " + DIRECCION + ' SIP/1.0 ' + '\r\n\r\n')
 data = my_socket.recv(1024)
 
 print 'Recibido -- ', data
