@@ -8,6 +8,8 @@ en UDP simple. Registra los clientes SIP.
 import SocketServer
 import sys
 
+client_dic = {}
+
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
     """
@@ -20,23 +22,28 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         client_port = str(self.client_address[1])
         print "IP del cliente: " + client_ip,
         print "| Puerto del cliente: " + client_port
-        client_dic = {}
 
         while 1:
             # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
-            param_list = line.split(" ")
-            param_list[-1] = param_list[-1].split('\r')[0]
-            if param_list != [""]:
-                method = param_list[0]
-                user = param_list[1]
-                version = param_list[2]
+            param_list = line.split()
 
-                if method == 'REGISTER':
-                    client_dic[user] = client_ip
+            # Registro SIP del cliente
+            if param_list != []:
+                if param_list[0] == 'REGISTER':
+                    sip_address = param_list[1]
+                    version = param_list[2]
+                    expires = float(param_list[4])
+                    client_dic[sip_address] = client_ip
+
+                    # Si ha pasado el tiempo de expiración borramos el cliente
+                    if expires == 0:
+                        del client_dic[sip_address]
+                        print "Eliminado el cliente " + sip_address
                     self.wfile.write(version + " 200 OK\r\n\r\n")
             if not line:
                 break
+
 
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
