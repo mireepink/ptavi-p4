@@ -14,21 +14,23 @@ try:
     SERVER = sys.argv[1]
     PORT = int(sys.argv[2])
     METHOD = sys.argv[3].upper()
-    USER = sys.argv[4]
+    SIP_ADDRESS = sys.argv[4]
+    EXPIRES = sys.argv[5]
 except IndexError:
-    print ("Usage: python client.py ip server_port SIP_method user")
+    print ("Usage: client.py ip puerto register sip_address expires_value")
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((SERVER, PORT))
 
-request = METHOD + " " + "sip:" + USER + " SIP/1.0" + '\r\n\r\n'
+request = METHOD + " " + "sip:" + SIP_ADDRESS + " SIP/1.0\r\n" + "Expires: " + EXPIRES + '\r\n\r\n'
+
 print "Enviando:\n" + request
 my_socket.send(request)
 data = my_socket.recv(1024)
-
 print data
+
 print "Terminando socket..."
 
 # Cerramos todo
