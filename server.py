@@ -10,7 +10,7 @@ import sys
 import time
 
 # Variable global para almacenar los usuarios y sus valores
-users_dic = {}
+users = {}
 
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
@@ -20,39 +20,35 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
-        self.ip = str(self.client_address[0])
-        self.client_port = str(self.client_address[1])
-        print "IP del cliente: " + self.ip,
-        print "| Puerto del cliente: " + self.client_port
+        ip = str(self.client_address[0])
+        port = str(self.client_address[1])
+        print "IP del cliente: " + ip + "| Puerto del cliente: " + port
 
         while 1:
             # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
-            line_list = line.split()
+            lines = line.split()
 
-            if line_list != []:
-                if line_list[0] == 'REGISTER':
-                    self.address = line_list[1]
-                    self.version = line_list[2]
-                    self.expires = float(line_list[4])
+            if lines != []:
+                if lines[0] == 'REGISTER':
+                    user = lines[1]
+                    version = lines[2]
+                    expires = float(lines[4])
 
                     # Registro del usuario
-                    if self.expires != 0:
-                        actual_time = time.time()
-                        users_dic[self.address] = (self.ip, self.expires,
-                                                   actual_time)
+                    if expires != 0:
+                        users[user] = (ip, expires, time.time())
                         self.register2file()
-                        print "Añadido el usuario " + self.address
-
+                        print "Añadido el usuario " + user
                     # Borrado del usuario
                     else:
-                        del users_dic[self.address]
+                        del users[user]
                         self.register2file()
-                        print "Eliminado el usuario " + self.address
-                    self.wfile.write(self.version + " 200 OK\r\n\r\n")
+                        print "Eliminado el usuario " + user
+                    self.wfile.write(version + " 200 OK\r\n\r\n")
 
                     # Comprobamos caducidad de usuarios registrados
-                    self.check_exp_time()
+                    self.check_expires()
 
             if not line:
                 break
@@ -61,33 +57,32 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         """
         Método para imprimir los usuarios registrados en un fichero de texto
         """
-        reg_file = open('registered.txt', 'w')
-        reg_file.write("User\tIP\tExpires\n")
+        users_file = open('registered.txt', 'w')
+        users_file.write("User\tIP\tExpires\n")
 
-        for user in users_dic:
-            ip = str(users_dic[user][0])
-            login_time = users_dic[user][2]
+        for user in users:
+            ip = str(users[user][0])
+            log_time = users[user][2]
             format_time = time.strftime('%Y-%m-%d %H:%M:%S',
-                                        time.gmtime(login_time))
-            reg_file.write(user + "\t" + ip + "\t" + format_time + "\n")
-        reg_file.close()
+                                        time.gmtime(log_time))
+            users_file.write(user + "\t" + ip + "\t" + format_time + "\n")
+        users_file.close()
 
-    def check_exp_time(self):
+    def check_expires(self):
         """
         Método para comprobar caducidad de usuarios registrados
         """
-        address_list = []
-        actual_time = time.time()
-        for user in users_dic:
-            address_list.append(user)
-        for address in address_list:
-            expires = users_dic[address][1]
-            login_time = users_dic[address][2]
-            elapsed_time = actual_time - login_time
+        addresses = []
+        for user in users:
+            addresses.append(user)
+        for address in addresses:
+            expires = users[address][1]
+            log_time = users[address][2]
+            elapsed_time = time.time() - log_time
 
             # Si ha expirado el tiempo eliminamos al usuario
             if elapsed_time >= expires:
-                del users_dic[address]
+                del users[address]
                 self.register2file()
                 print "Tiempo expirado para " + address,
                 print "--> Usuario eliminado."
