@@ -7,22 +7,21 @@ Programa cliente que abre un socket a un servidor
 import sys
 import socket
 
-# Cliente UDP simple.
-
-# Dirección IP del servidor.
 SERVER = sys.argv[1]
-PORT = int(sys.argv[2])
+PORT = sys.argv[2]
 
 # Contenido que vamos a enviar
 LINE = sys.argv[3]
+registro = 'REGISTER sip:' + sys.argv[4] + ' SIP/1.0\r\n\r\n'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-my_socket.connect((SERVER, PORT))
+my_socket.connect((SERVER, int(PORT)))
 
-print "Enviando: " + LINE
-my_socket.send(LINE + '\r\n')
+if (LINE == 'register'):
+	print "Enviando registro: " + registro
+my_socket.send(registro)
 data = my_socket.recv(1024)
 
 print 'Recibido -- ', data
