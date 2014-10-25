@@ -13,6 +13,7 @@ PORT = sys.argv[2]
 # Contenido que vamos a enviar
 LINE = sys.argv[3]
 registro = 'REGISTER sip:' + sys.argv[4] + ' SIP/1.0\r\n\r\n'
+EXPIRES = 'Expires: ' + sys.argv[5]
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -21,7 +22,8 @@ my_socket.connect((SERVER, int(PORT)))
 
 if (LINE == 'register'):
 	print "Enviando registro: " + registro
-my_socket.send(registro)
+	expires = EXPIRES + "\r\n\r\n"
+my_socket.send(registro + expires)
 data = my_socket.recv(1024)
 
 print 'Recibido -- ', data
