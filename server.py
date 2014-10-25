@@ -37,6 +37,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                     del dicc_usuario[line3[1]]
                     self.wfile.write("El usuario se ha borrado\r\n")
                     self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
+				else:
                     self.wfile.write("SIP/1.0 410 Gone\r\n\r\n")
 
 if __name__ == "__main__":
