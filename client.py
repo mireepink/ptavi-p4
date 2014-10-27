@@ -24,7 +24,7 @@ my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((SERVER, PORT))
 
-request = METHOD + " " + "sip:" + SIP_ADDRESS + " SIP/1.0\r\n" + "Expires: "
+request = METHOD + " " + "sip:" + SIP_ADDRESS + " SIP/2.0\r\n" + "Expires: "
 request += EXPIRES + '\r\n\r\n'
 
 print "Enviando:\n" + request
