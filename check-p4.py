@@ -74,7 +74,8 @@ files = ['README.md',
          'client.py',
          'server.py',
          'register.libpcap',
-         '.git']
+         '.git',
+         'check-p4.py']
 
 aleatorio = str(int(random.random() * 1000000))
 
