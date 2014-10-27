@@ -6,39 +6,58 @@ Clase (y programa principal) para un servidor
 
 import SocketServer
 import sys
+import time
 
 puerto = sys.argv[1]
 
 dicc_usuario = {}
 
-fichero = open('fichero.txt', 'w')
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
+
     """
     Registro SIP
     """
 
     def handle(self):
+        self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
         ip = str(self.client_address[0])
         puerto = str(self.client_address[1])
-        self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
+        hora = time.time()
         while 1:
             line = self.rfile.read()
             line1 = line.split()
-            if (line1[0] == 'REGISTER'):
-                fichero.write(ip + " " + puerto)
             line2 = line1[1]
             line3 = line2.split(":")
-            #añado un valor a la clave del dicc_usuario
-            dicc_usuario[line3[1]] = ip
+            user = line3[1]
+            dicc_usuario[user] = ip
+            print line1[4]
             if line1[4] == '0':
-                busca_clave = dicc_usuario.has_key(line3[1])
-                if busca_clave == 1:
-                    del dicc_usuario[line3[1]]
+                if user in dicc_usuario:
+                    del dicc_usuario[user]
+                    self.register2file()
                     self.wfile.write("El usuario se ha borrado\r\n")
                     self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
-				else:
-                    self.wfile.write("SIP/1.0 410 Gone\r\n\r\n")
+            else:
+                hora_actualizada = hora + int(line1[4])
+                #añado valor y tiempo a la clave del dicc_usuario
+                dicc_usuario[user] = ip + ',' + str(hora_actualizada)
+                self.register2file()
+                self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
+            if not line or "[""]":
+                break
+    """
+    Registrar clienta con ip y hora
+    """
+
+    def register2file(self):
+        registered = open("registered.txt", "w")
+        registered.write('User' + "\t" + 'IP' + "\t" + 'Expires' + '\n')
+        for user, valor in dicc_usuario.items():
+            ip = valor.split(',')[0]
+            hora_actual = time.strftime('%Y-%m-%d %H:%M:%S',
+                                        time.gmtime(time.time()))
+            registered.write(user + "\t" + ip + "\t" + hora_actual + "\n")
 
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
