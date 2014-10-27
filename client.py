@@ -14,19 +14,19 @@ if len(entrada) != 6:
 
 IP = entrada[1]
 PORT = int(entrada[2])
-PETICION = entrada[3].upper()
+PETICION = entrada[3]
 
 DIRECCION = entrada[4]
 TIEMPO = entrada[5]
 
-LINEA = PETICION + " sip:" + DIRECCION + ' SIP/2.0 ' + '\r\n'
+LINEA = PETICION + " sip:" + DIRECCION + ' SIP/2.0' + '\r\n'
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((IP, PORT))
 
 print PETICION + " sip:" + DIRECCION
 print "Expires: " + TIEMPO
-my_socket.send(LINEA + "Expires: " + TIEMPO + '\r\n\r\n')
+my_socket.send(LINEA + " Expires: " + TIEMPO + '\r\n\r\n')
 data = my_socket.recv(1024)
 print 'Recibido -- ', data
 print "Terminando socket..."
