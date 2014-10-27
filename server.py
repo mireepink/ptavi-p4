@@ -37,21 +37,23 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             line = self.rfile.read()
             entrada = line.split(' ')
             print line
+            print entrada
             if entrada[0] == 'REGISTER':
-                hora = float(time.time()) + float(entrada[5])
+                hora = float(time.time()) + float(entrada[4])
                 self.lista = [self.client_address[0], hora]
-                self.diccionario[entrada[2]] = self.lista
+                self.diccionario[entrada[1]] = self.lista
                 hora_actual = float(time.time())
                 for direccion in self.diccionario.keys():
                     if self.diccionario[direccion][1] < hora_actual:
                         del self.diccionario[direccion]
-                print "Enviando..." + entrada[3] + " 200 " + "OK\r\n\r\n"
-                self.wfile.write(entrada[3] + " 200 " + "OK\r\n\r\n")
+                print "Enviando..." + "SIP/2.0 200 OK\r\n\r\n"
+                self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
+                self.register2file()
             else:
-                print "Peticion erronea"
+                print "SIP/2.0 400 Badrequest\r\n\r\n"
+                self.wfile.write("SIP/2.0 400 bad request\r\n\r\n")
             if not line:
                 break
-            self.register2file()
 
 if __name__ == "__main__":
     """
@@ -60,5 +62,5 @@ if __name__ == "__main__":
     Entrada = sys.argv
     serv = SocketServer.UDPServer(("", int(Entrada[1])),  SIPRegisterHandler)
 
-    print "Lanzando servidor UDP"
+    print "Lanzando servidor SIP"
     serv.serve_forever()
