@@ -19,36 +19,46 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
     """
 
     def handle(self):
+        """
+        Método para recibir en el manejador y gestionar registro de usuarios
+        """
         # Escribe dirección y puerto del cliente (de tupla client_address)
         ip = str(self.client_address[0])
         port = str(self.client_address[1])
         print "IP del cliente: " + ip + "| Puerto del cliente: " + port
 
         while 1:
-            # Leyendo línea a línea lo que nos envía el cliente
+            # Leyendo carácter a carácter lo que nos envía el cliente
             line = self.rfile.read()
             lines = line.split()
 
             if lines != []:
                 if lines[0] == 'REGISTER':
-                    user = lines[1]
+                    address = lines[1]
                     version = lines[2]
                     expires = float(lines[4])
 
-                    # Registro del usuario
-                    if expires != 0:
-                        users[user] = (ip, expires, time.time())
-                        self.register2file()
-                        print "Añadido el usuario " + user
-                    # Borrado del usuario
-                    else:
-                        del users[user]
-                        self.register2file()
-                        print "Eliminado el usuario " + user
-                    self.wfile.write(version + " 200 OK\r\n\r\n")
-
                     # Comprobamos caducidad de usuarios registrados
                     self.check_expires()
+
+                    # Registro del usuario
+                    if expires != 0:
+                        users[address] = (ip, expires, time.time())
+                        self.register2file()
+                        print "Añadido el usuario " + address
+                    # Borrado del usuario (si existe en el diccionario)
+                    else:
+                        found = 0
+                        for user in users:
+                            if address == user:
+                                found = 1
+                        if found:
+                            del users[user]
+                            self.register2file()
+                            print "Eliminado el usuario " + user
+                        else:
+                            print "El usuario no se encuentra en el registro"
+                    self.wfile.write(version + " 200 OK\r\n\r\n")
 
             if not line:
                 break
