@@ -17,7 +17,7 @@ PORT = sys.argv[2]
 
 # Contenido que vamos a enviar
 LINE = sys.argv[3]
-registro = 'REGISTER sip:' + sys.argv[4] + ' SIP/1.0\r\n'
+registro = 'REGISTER sip:' + sys.argv[4] + ' SIP/2.0\r\n'
 EXPIRES = 'Expires: ' + sys.argv[5] + '\r\n\r\n'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
