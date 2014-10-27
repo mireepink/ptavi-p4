@@ -43,7 +43,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
     def register2file(self):
         """
         Su función es la de escribir en el fichero los usuarios
-        con su IP y tiempo e ir eliminándolos cuando corresponda
+        con su IP 
         """
         fich = open('registered.txt', 'w')
         fich.write("User\tIP\tExpires\r\n")
