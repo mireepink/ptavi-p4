@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: iso-8859-15 -*-
-"""
-Programa cliente que abre un socket a un servidor
-"""
+
 import sys
 import socket
 
@@ -25,10 +23,11 @@ my_socket.connect((SERVER, PORT))
 
 print '\r\n' + "REGISTER sip:" + REGISTER + " SIP/2.0" + '\r\n'
 print "Expires: " + str(EXPIRES) + '\r\n\r\n'
-my_socket.send("REGISTER sip:" + REGISTER + " SIP/2.0" + " Expires: " + str(EXPIRES))
+my_socket.send("REGISTER sip:" + REGISTER + " SIP/2.0" +
+               " Expires: " + str(EXPIRES))
 data = my_socket.recv(1024)
 
-print  data
+print data
 print "Terminando socket..."
 
 # Cerramos todo
