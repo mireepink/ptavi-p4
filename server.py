@@ -36,13 +36,13 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                     del dicc_usuario[user]
                     self.register2file()
                     self.wfile.write("El usuario se ha borrado\r\n")
-                    self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
+                    self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
             else:
                 hora_actualizada = hora + int(line1[4])
                 #añado valor y tiempo a la clave del dicc_usuario
                 dicc_usuario[user] = ip + ',' + str(hora_actualizada)
                 self.register2file()
-                self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
+                self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
             if not line or "[""]":
                 break
     """
