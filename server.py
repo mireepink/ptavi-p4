@@ -31,7 +31,6 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             line3 = line2.split(":")
             user = line3[1]
             dicc_usuario[user] = ip
-            print line1[4]
             if line1[4] == '0':
                 if user in dicc_usuario:
                     del dicc_usuario[user]
