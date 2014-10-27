@@ -7,8 +7,15 @@ import time
 
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
-
+    """
+    SIPRegisterHandler class
+    """
     def handle(self):
+        """
+        Se encarga de guardarme en un diccionario
+        el cliente, su IP y su tiempo Expires al recibir un REGISTER,
+        además de ir eliminando los clientes cuando Expires=0
+        """
         while 1:
             line = self.rfile.read()
             if not line:
@@ -34,6 +41,10 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 self.register2file()
 
     def register2file(self):
+        """
+        Su función es la de escribir en el fichero los usuarios
+        con su IP y tiempo e ir eliminándolos cuando corresponda
+        """
         fich = open('registered.txt', 'w')
         fich.write("User\tIP\tExpires\r\n")
         for Client in diccionario.keys():
@@ -43,6 +54,9 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             fich.write(Client + '\t' + IP + '\t' + time_new + '\r\n')
 
 if __name__ == "__main__":
+    """
+    Creamos un servidor y escuchamos
+    """
     diccionario = {}
     serv = SocketServer.UDPServer(("", int(sys.argv[1])), SIPRegisterHandler)
     print "Lanzando servidor UDP de eco..." + '\r\n'
