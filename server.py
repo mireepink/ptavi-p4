@@ -35,6 +35,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         """
         while 1:
             line = self.rfile.read()
+            if not line:
+                break
             entrada = line.split(' ')
             print line
             print entrada
@@ -52,8 +54,6 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             else:
                 print "SIP/2.0 400 Badrequest\r\n\r\n"
                 self.wfile.write("SIP/2.0 400 bad request\r\n\r\n")
-            if not line:
-                break
 
 if __name__ == "__main__":
     """
