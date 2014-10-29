@@ -17,7 +17,7 @@ PORT = int(entrada[2])
 PETICION = entrada[3]
 
 DIRECCION = entrada[4]
-TIEMPO = entrada[5]
+TIEMPO = int(entrada[5])
 
 LINEA = PETICION + " sip:" + DIRECCION + ' SIP/2.0' + '\r\n'
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
