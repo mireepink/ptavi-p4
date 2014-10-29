@@ -59,5 +59,5 @@ if __name__ == "__main__":
     """
     diccionario = {}
     serv = SocketServer.UDPServer(("", int(sys.argv[1])), SIPRegisterHandler)
-    print "Lanzando servidor UDP de eco..." + '\r\n'
+    print "Lanzando servidor SIP..." + '\r\n'
     serv.serve_forever()
