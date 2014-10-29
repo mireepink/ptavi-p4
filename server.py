@@ -45,11 +45,11 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
             if not line or "[""]":
                 break
+
+    def register2file(self):
     """
     Registrar clienta con ip y hora
     """
-
-    def register2file(self):
         registered = open("registered.txt", "w")
         registered.write('User' + "\t" + 'IP' + "\t" + 'Expires' + '\n')
         for user, valor in dicc_usuario.items():
