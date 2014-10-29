@@ -105,5 +105,5 @@ if __name__ == "__main__":
         print ("Usage: python server.py server_port")
 
     serv = SocketServer.UDPServer(("", port), SIPRegisterHandler)
-    print "Lanzando servidor UDP de eco..."
+    print "Lanzando servidor SIP..."
     serv.serve_forever()
