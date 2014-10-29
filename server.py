@@ -20,7 +20,6 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
     """
 
     def handle(self):
-        self.wfile.write("SIP/1.0 200 OK\r\n\r\n")
         ip = str(self.client_address[0])
         puerto = str(self.client_address[1])
         hora = time.time()
