@@ -68,7 +68,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         Método para imprimir los usuarios registrados en un fichero de texto
         """
         users_file = open('registered.txt', 'w')
-        users_file.write("User\tIP\tExpires\n")
+        users_file.write('User' + '\t' + 'IP' + '\t' + 'Expires' + '\n')
 
         for user in users:
             ip = str(users[user][0])
