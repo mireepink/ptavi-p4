@@ -15,7 +15,7 @@ try:
     PORT = int(sys.argv[2])
     METHOD = sys.argv[3].upper()
     SIP_ADDRESS = sys.argv[4]
-    EXPIRES = sys.argv[5]
+    EXPIRES = int(sys.argv[5])
 except IndexError:
     print ("Usage: client.py ip puerto register sip_address expires_value")
 
