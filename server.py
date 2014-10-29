@@ -32,6 +32,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             line = self.rfile.read()
             lines = line.split()
 
+            if not line:
+                break
             if lines != []:
                 if lines[0] == 'REGISTER':
                     address = lines[1]
@@ -59,9 +61,6 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                         else:
                             print "El usuario no se encuentra en el registro"
                     self.wfile.write(version + " 200 OK\r\n\r\n")
-
-            if not line:
-                break
 
     def register2file(self):
         """
