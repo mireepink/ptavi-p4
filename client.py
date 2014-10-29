@@ -6,15 +6,13 @@ import socket
 
 # Cliente UDP simple.
 
-try:
-    SERVER = sys.argv[1]
-    PORT = int(sys.argv[2])
-    REGISTER = sys.argv[4]
-    EXPIRES = int(sys.argv[5])
-except IndexError:
+if len(sys.argv) != 6:
     sys.exit("Usage: client.py ip puerto register sip_address expires_value")
-except ValueError:
-    sys.exit("Usage: client.py ip puerto register sip_address expires_value")
+    
+SERVER = sys.argv[1]
+PORT = int(sys.argv[2])
+REGISTER = sys.argv[4]
+EXPIRES = int(sys.argv[5])
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
